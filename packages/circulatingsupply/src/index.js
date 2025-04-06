@@ -21,17 +21,21 @@ const addresses = [
 let resultCache = "";
 
 async function cache() {
-  const result = await fetch(
-    `https://${process.env.SERVICE_URL ?? DEFAULT_SERVICE_URL}/api/v3/token/summary`,
-  );
-  const json = await result.json();
-  const totalSupply = BigInt(json.data.totalSupply[0].amount);
-  let nonCirculating = BigInt(0);
-  for (const address of addresses) {
-    nonCirculating += await getBalance(address);
+  try {
+    const result = await fetch(
+      `https://${process.env.SERVICE_URL ?? DEFAULT_SERVICE_URL}/api/v3/token/summary`,
+    );
+    const json = await result.json();
+    const totalSupply = BigInt(json.data.totalSupply[0].amount);
+    let nonCirculating = BigInt(0);
+    for (const address of addresses) {
+      nonCirculating += await getBalance(address);
+    }
+    const circulatingSupply = (totalSupply - nonCirculating).toString();
+    resultCache = `${circulatingSupply.slice(0, circulatingSupply.length - 8)}.${circulatingSupply.slice(circulatingSupply.length - 8)}`;
+  } catch (err) {
+    console.error("Cache error:", err.message);
   }
-  const circulatingSupply = (totalSupply - nonCirculating).toString();
-  resultCache = `${circulatingSupply.slice(0, circulatingSupply.length - 8)}.${circulatingSupply.slice(circulatingSupply.length - 8)}`;
 }
 
 async function getBalance(address) {
@@ -44,12 +48,18 @@ async function getBalance(address) {
   return amount + locked;
 }
 
+setInterval(cache, 60000); // refresh every minute
+cache(); // initial run
+
 async function handle(req, res) {
-  cache();
   res.json({ result: resultCache });
 }
 
 app.get("/", handle);
+
+app.get("/api/status", (req, res) => {
+  res.send("OK");
+});
 
 app.listen(PORT, () => {
   console.log(`circulatingsupply app running on port ${PORT}`);
