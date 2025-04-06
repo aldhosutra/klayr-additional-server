@@ -325,14 +325,19 @@ async function main() {
     },
   );
 
+  fastify.get("/api/status", (_request: FastifyRequest, _reply: FastifyReply) => {
+    return "OK";
+  });
+
   // Run the server!
   try {
+    const port = process.env.PORT ? Number(process.env.PORT) : DEFAULT_PORT;
     await fastify.listen({
       host: "0.0.0.0",
-      port: process.env.PORT ? Number(process.env.PORT) : DEFAULT_PORT,
+      port: port,
     });
     fastify.cron.startAllJobs();
-    console.log("Server started");
+    console.log(`Cacher app running on port ${port}`);
   } catch (err) {
     fastify.log.error(err);
     process.exit(1);

@@ -6,7 +6,6 @@ module.exports = {
       env: {
         PORT: 3000,
         SERVICE_URL: "service.klayr.xyz",
-        NODE_ENV: "production",
       },
     },
     {
@@ -15,7 +14,6 @@ module.exports = {
       env: {
         PORT: 3001,
         SERVICE_URL: "service.klayr.xyz",
-        NODE_ENV: "production",
       },
     },
     {

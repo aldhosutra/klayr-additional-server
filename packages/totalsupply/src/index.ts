@@ -1,10 +1,10 @@
-const { DEFAULT_SERVICE_URL } = require("./default");
-const express = require("express");
-const app = express();
+import { DEFAULT_SERVICE_URL } from "./default";
+import express, { Request, Response } from "express";
 
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-async function handle(req, res) {
+async function handle(_req: Request, res: Response) {
   try {
     const result = await fetch(
       `https://${process.env.SERVICE_URL ?? DEFAULT_SERVICE_URL}/api/v3/token/summary`,
@@ -14,13 +14,13 @@ async function handle(req, res) {
     const formatted = `${amount.slice(0, amount.length - 8)}.${amount.slice(amount.length - 8)}`;
     res.json({ result: formatted });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ error: (err as { message: string }).message });
   }
 }
 
 app.get("/", handle);
 
-app.get("/api/status", (req, res) => {
+app.get("/api/status", (_req, res) => {
   res.send("OK");
 });
 

@@ -1,7 +1,7 @@
-const { DEFAULT_SERVICE_URL } = require("./default");
-const express = require("express");
-const app = express();
+import { DEFAULT_SERVICE_URL } from "./default";
+import express, { Request, Response } from "express";
 
+const app = express();
 const PORT = process.env.PORT || 3001;
 
 const addresses = [
@@ -33,12 +33,15 @@ async function cache() {
     }
     const circulatingSupply = (totalSupply - nonCirculating).toString();
     resultCache = `${circulatingSupply.slice(0, circulatingSupply.length - 8)}.${circulatingSupply.slice(circulatingSupply.length - 8)}`;
-  } catch (err) {
-    console.error("Cache error:", err.message);
+  } catch (err: unknown) {
+    console.error(
+      "Circulatingsupply cache error:",
+      (err as { message: string }).message,
+    );
   }
 }
 
-async function getBalance(address) {
+async function getBalance(address: string) {
   const result = await fetch(
     `https://${process.env.SERVICE_URL ?? DEFAULT_SERVICE_URL}/api/v3/token/balances?address=${address}`,
   );
@@ -51,13 +54,13 @@ async function getBalance(address) {
 setInterval(cache, 60000); // refresh every minute
 cache(); // initial run
 
-async function handle(req, res) {
+async function handle(_req: Request, res: Response) {
   res.json({ result: resultCache });
 }
 
 app.get("/", handle);
 
-app.get("/api/status", (req, res) => {
+app.get("/api/status", (_req: any, res: { send: (arg0: string) => void }) => {
   res.send("OK");
 });
 
