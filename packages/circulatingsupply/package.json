@@ -1,0 +1,12 @@
+{
+  "name": "circulatingsupply",
+  "version": "0.0.1-alpha",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "node ../../dist/circulatingsupply/src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

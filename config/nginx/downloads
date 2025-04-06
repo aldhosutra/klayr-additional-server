@@ -1,0 +1,12 @@
+server {
+    listen 8080;
+    server_name downloads.klayr.xyz;
+
+    root /var/www/downloads;
+    index index.html;
+
+    location / {
+        autoindex on;
+        try_files $uri $uri/ =404;
+    }
+}

@@ -1,0 +1,12 @@
+server {
+    listen 8081;
+    server_name snapshots.klayr.xyz;
+
+    root /var/www/snapshots;
+    index index.html;
+
+    location / {
+        autoindex on;
+        try_files $uri $uri/ =404;
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "totalsupply",
+  "version": "0.0.1-alpha",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "start": "node ../../dist/totalsupply/src/index.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
