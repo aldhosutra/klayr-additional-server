@@ -1,10 +1,20 @@
 #!/bin/bash
 
+export NVM_DIR="/root/.nvm"
+source "$NVM_DIR/nvm.sh"
+nvm use 18 >/dev/null
+export PATH="/root/.nvm/versions/node/v18.20.8/bin:$PATH"
+
 MODE="mainnet"
 
 /root/.nvm/versions/node/v18.20.8/bin/pm2 stop klayr-core
 rm /root/snapshot/blockchain.tar.gz
-/root/.nvm/versions/node/v18.20.8/lib/node_modules/klayr-core/bin/run blockchain export -o /root/snapshot
+
+if ! /root/.nvm/versions/node/v18.20.8/lib/node_modules/klayr-core/bin/run blockchain export -o /root/snapshot; then
+  echo "Export failed" >&2
+  exit 1
+fi
+
 /root/.nvm/versions/node/v18.20.8/bin/node /root/.nvm/versions/node/v18.20.8/bin/pm2 start klayr-core
 
 NOW=$( date +'%Y%m%d%H%M' )
