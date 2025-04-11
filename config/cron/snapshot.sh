@@ -3,7 +3,7 @@
 export NVM_DIR="/root/.nvm"
 source "$NVM_DIR/nvm.sh"
 nvm use 18 >/dev/null
-export PATH="/root/.nvm/versions/node/v18.20.8/bin:$PATH"
+export PATH="/root/.nvm/versions/node/v18.20.8/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:$PATH"
 
 MODE="mainnet"
 
