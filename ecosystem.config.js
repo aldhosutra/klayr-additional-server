@@ -22,7 +22,7 @@ module.exports = {
       env: {
         PORT: 3002,
         SERVICE_URL: "service.klayr.xyz",
-        SSL: false,
+        SSL: true,
       },
     },
     {
@@ -30,8 +30,8 @@ module.exports = {
       script: "./dist/cacher/src/index.js",
       env: {
         PORT: 3003,
-        SERVICE_URL: "service.klayr.xyz",
-        SSL: false,
+        SERVICE_URL: "testnet-service.klayr.xyz",
+        SSL: true,
       },
     },
   ],

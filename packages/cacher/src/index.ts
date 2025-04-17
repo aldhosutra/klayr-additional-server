@@ -182,7 +182,7 @@ const importLastCommissionIncreaseTime = async () => {
 
 const updateValidatorsCache = async () => {
   const validators = await client.rpc("get.pos.validators", {
-    limit: 10000,
+    limit: 103,
     offset: 0,
   });
   if (validators.status === "success") {
