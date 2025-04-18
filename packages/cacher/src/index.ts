@@ -29,6 +29,7 @@ const statuses = [
   "ineligible",
 ] as ValidatorStatus[];
 
+const ssl = (process.env.SSL ?? "false").toLowerCase() === "true";
 const allUsedBlocks: Record<number, number> = {
   23390991: 1701799340,
 };
@@ -99,18 +100,21 @@ const getRewardsEstimates = async () => {
       //   };
       //   continue;
       // }
-      const rewards = await fetch(`http://${serviceUrl}/api/v3/invoke`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          endpoint: "dynamicReward_getExpectedValidatorRewards",
-          params: {
-            validatorAddress: validator.address,
+      const rewards = await fetch(
+        `${ssl ? "https" : "http"}://${serviceUrl}/api/v3/invoke`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-        }),
-      });
+          body: JSON.stringify({
+            endpoint: "dynamicReward_getExpectedValidatorRewards",
+            params: {
+              validatorAddress: validator.address,
+            },
+          }),
+        },
+      );
       const rewardsJson = await rewards.json();
       if (rewardsJson.data) {
         rewardsEstimatesCache[validator.address] = rewardsJson.data;
